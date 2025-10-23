@@ -117,6 +117,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             sidebarTotal: sidebarElements.length,
             sidebarHidden
           };
+
         }
       });
 

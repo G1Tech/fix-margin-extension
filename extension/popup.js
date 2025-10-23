@@ -73,5 +73,6 @@ fixButton?.addEventListener('click', () => {
     }
 
     setStatus(messages.join(' '));
+
   });
 });

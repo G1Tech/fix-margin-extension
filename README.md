@@ -2,6 +2,7 @@
 
 This repository contains a Chrome extension that zeroes out the `margin-left` style for every element on the current page that matches the selector `.ant-layout.css-133v4sd` and hides the sidebar `aside` element rendered as `ant-layout-sider`.
 
+
 ## How it works
 
 1. Click the extension icon to open the popup.
