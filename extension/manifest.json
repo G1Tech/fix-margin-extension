@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Fix Margin Extension",
+  "description": "Sets margin-left to 0 for elements with class \"ant-layout css-133v4sd\" when triggered.",
+  "version": "1.0.0",
+  "permissions": [
+    "scripting",
+    "activeTab"
+  ],
+  "action": {
+    "default_title": "Fix Margin",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}
