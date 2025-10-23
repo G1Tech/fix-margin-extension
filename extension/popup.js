@@ -35,18 +35,44 @@ fixButton?.addEventListener('click', () => {
       return;
     }
 
-    if (response.total === 0) {
-      setStatus('No matching elements found.');
+    const layoutTotal = response.layoutTotal ?? 0;
+    const layoutForced = response.layoutForced ?? 0;
+    const layoutHad262 = response.layoutHad262 ?? 0;
+    const sidebarTotal = response.sidebarTotal ?? 0;
+    const sidebarHidden = response.sidebarHidden ?? 0;
+
+    if (layoutTotal === 0 && sidebarTotal === 0) {
+      setStatus('No matching layout or sidebar elements found.');
       return;
     }
 
-    if (response.updated === 0) {
-      setStatus('Matching elements found, but none had a 262px margin.');
-      return;
+    const messages = [];
+
+    if (layoutTotal > 0) {
+      if (layoutForced > 0) {
+        let layoutMessage = `Set margin-left to 0 on ${layoutForced}/${layoutTotal} layout element(s)`;
+
+        if (layoutHad262 > 0) {
+          layoutMessage += ` (${layoutHad262} originally had 262px).`;
+        } else {
+          layoutMessage += '.';
+        }
+
+        messages.push(layoutMessage);
+      } else {
+        messages.push(`Layout elements already had margin-left 0 (${layoutTotal}).`);
+      }
     }
 
-    setStatus(
-      `Updated ${response.updated} element(s) that originally had a 262px margin (out of ${response.total}).`
-    );
+    if (sidebarTotal > 0) {
+      if (sidebarHidden > 0) {
+        messages.push(`Hid ${sidebarHidden}/${sidebarTotal} sidebar(s).`);
+      } else {
+        messages.push(`Sidebar elements were already hidden (${sidebarTotal}).`);
+      }
+    }
+
+    setStatus(messages.join(' '));
+
   });
 });

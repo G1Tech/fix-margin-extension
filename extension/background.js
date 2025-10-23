@@ -72,20 +72,52 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const [result] = await chrome.scripting.executeScript({
         target: { tabId: tab.id },
         func: () => {
-          const elements = document.querySelectorAll('.ant-layout.css-133v4sd');
-          let matchedOriginal = 0;
-          let updated = 0;
+          const layoutSelector = '.ant-layout.css-133v4sd';
+          const sidebarSelector =
+            'aside.ant-layout-sider.ant-layout-sider-dark.style_sider__Hlcz3.css-133v4sd';
 
-          elements.forEach((element) => {
-            const computed = window.getComputedStyle(element).marginLeft;
-            if (computed === '262px') {
-              matchedOriginal += 1;
+          const layoutElements = Array.from(document.querySelectorAll(layoutSelector));
+          const sidebarElements = Array.from(document.querySelectorAll(sidebarSelector));
+
+          let layoutForced = 0;
+          let layoutHad262 = 0;
+          let sidebarHidden = 0;
+
+          layoutElements.forEach((element) => {
+            const inlineMargin = element.style.marginLeft?.trim();
+            const computedMargin = window.getComputedStyle(element).marginLeft?.trim();
+            const had262 = inlineMargin === '262px' || inlineMargin === '262' || computedMargin === '262px';
+            const alreadyZero = computedMargin === '0px';
+
+            if (!alreadyZero || had262) {
               element.style.setProperty('margin-left', '0px', 'important');
-              updated += 1;
+              layoutForced += 1;
+
+              if (had262) {
+                layoutHad262 += 1;
+              }
             }
           });
 
-          return { total: elements.length, matchedOriginal, updated };
+          sidebarElements.forEach((element) => {
+            const computedDisplay = window.getComputedStyle(element).display?.trim();
+            const alreadyHidden = computedDisplay === 'none';
+
+            element.style.setProperty('display', 'none', 'important');
+
+            if (!alreadyHidden) {
+              sidebarHidden += 1;
+            }
+          });
+
+          return {
+            layoutTotal: layoutElements.length,
+            layoutForced,
+            layoutHad262,
+            sidebarTotal: sidebarElements.length,
+            sidebarHidden
+          };
+
         }
       });
 
