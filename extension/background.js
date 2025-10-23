@@ -78,10 +78,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
           const layoutElements = Array.from(document.querySelectorAll(layoutSelector));
           const sidebarElements = Array.from(document.querySelectorAll(sidebarSelector));
+          const mainSelector = 'main.ant-layout-content.css-133v4sd';
+          const mainElements = Array.from(document.querySelectorAll(mainSelector));
+          const headerElements = Array.from(document.querySelectorAll('header'));
+          const footerElements = Array.from(document.querySelectorAll('footer'));
+          const chatButtonSelector = 'div.style_chatButton__Gmdf9';
+          const chatButtonElements = Array.from(document.querySelectorAll(chatButtonSelector));
 
           let layoutForced = 0;
           let layoutHad262 = 0;
           let sidebarHidden = 0;
+          let mainAdjusted = 0;
+          let mainHad64 = 0;
+          let headersRemoved = 0;
+          let footersRemoved = 0;
+          let chatButtonsRemoved = 0;
 
           layoutElements.forEach((element) => {
             const inlineMargin = element.style.marginLeft?.trim();
@@ -110,12 +121,58 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
           });
 
+          mainElements.forEach((element) => {
+            const inlineMarginTop = element.style.marginTop?.trim();
+            const computedMarginTop = window.getComputedStyle(element).marginTop?.trim();
+            const had64 = inlineMarginTop === '64px' || inlineMarginTop === '64' || computedMarginTop === '64px';
+            const alreadyZeroTop = computedMarginTop === '0px';
+
+            if (!alreadyZeroTop || had64) {
+              element.style.setProperty('margin-top', '0px', 'important');
+              mainAdjusted += 1;
+
+              if (had64) {
+                mainHad64 += 1;
+              }
+            }
+          });
+
+          headerElements.forEach((element) => {
+            if (element.isConnected) {
+              element.remove();
+              headersRemoved += 1;
+            }
+          });
+
+          footerElements.forEach((element) => {
+            if (element.isConnected) {
+              element.remove();
+              footersRemoved += 1;
+            }
+          });
+
+          chatButtonElements.forEach((element) => {
+            if (element.isConnected) {
+              element.remove();
+              chatButtonsRemoved += 1;
+            }
+          });
+
           return {
             layoutTotal: layoutElements.length,
             layoutForced,
             layoutHad262,
             sidebarTotal: sidebarElements.length,
-            sidebarHidden
+            sidebarHidden,
+            mainTotal: mainElements.length,
+            mainAdjusted,
+            mainHad64,
+            headersFound: headerElements.length,
+            headersRemoved,
+            footersFound: footerElements.length,
+            footersRemoved,
+            chatButtonsFound: chatButtonElements.length,
+            chatButtonsRemoved
           };
 
         }

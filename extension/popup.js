@@ -19,7 +19,8 @@ const setStatus = (message, isError = false) => {
 };
 
 fixButton?.addEventListener('click', () => {
-  setStatus('Applying margin fix...');
+  setStatus('Applying page fixes...');
+
   fixButton.disabled = true;
 
   chrome.runtime.sendMessage({ type: 'FIX_MARGIN' }, (response) => {
@@ -40,9 +41,25 @@ fixButton?.addEventListener('click', () => {
     const layoutHad262 = response.layoutHad262 ?? 0;
     const sidebarTotal = response.sidebarTotal ?? 0;
     const sidebarHidden = response.sidebarHidden ?? 0;
+    const mainTotal = response.mainTotal ?? 0;
+    const mainAdjusted = response.mainAdjusted ?? 0;
+    const mainHad64 = response.mainHad64 ?? 0;
+    const headersFound = response.headersFound ?? 0;
+    const headersRemoved = response.headersRemoved ?? 0;
+    const footersFound = response.footersFound ?? 0;
+    const footersRemoved = response.footersRemoved ?? 0;
+    const chatButtonsFound = response.chatButtonsFound ?? 0;
+    const chatButtonsRemoved = response.chatButtonsRemoved ?? 0;
 
-    if (layoutTotal === 0 && sidebarTotal === 0) {
-      setStatus('No matching layout or sidebar elements found.');
+    if (
+      layoutTotal === 0 &&
+      sidebarTotal === 0 &&
+      mainTotal === 0 &&
+      headersFound === 0 &&
+      footersFound === 0 &&
+      chatButtonsFound === 0
+    ) {
+      setStatus('No matching elements found.');
       return;
     }
 
@@ -72,7 +89,46 @@ fixButton?.addEventListener('click', () => {
       }
     }
 
-    setStatus(messages.join(' '));
+    if (mainTotal > 0) {
+      if (mainAdjusted > 0) {
+        let mainMessage = `Set margin-top to 0 on ${mainAdjusted}/${mainTotal} main content element(s)`;
 
+        if (mainHad64 > 0) {
+          mainMessage += ` (${mainHad64} originally had 64px).`;
+        } else {
+          mainMessage += '.';
+        }
+
+        messages.push(mainMessage);
+      } else {
+        messages.push(`Main content elements already had margin-top 0 (${mainTotal}).`);
+      }
+    }
+
+    if (headersFound > 0) {
+      if (headersRemoved > 0) {
+        messages.push(`Removed ${headersRemoved}/${headersFound} header element(s).`);
+      } else {
+        messages.push(`Header element(s) were already removed (${headersFound}).`);
+      }
+    }
+
+    if (footersFound > 0) {
+      if (footersRemoved > 0) {
+        messages.push(`Removed ${footersRemoved}/${footersFound} footer element(s).`);
+      } else {
+        messages.push(`Footer element(s) were already removed (${footersFound}).`);
+      }
+    }
+
+    if (chatButtonsFound > 0) {
+      if (chatButtonsRemoved > 0) {
+        messages.push(`Removed ${chatButtonsRemoved}/${chatButtonsFound} chat button(s).`);
+      } else {
+        messages.push(`Chat button element(s) were already removed (${chatButtonsFound}).`);
+      }
+    }
+
+    setStatus(messages.join(' '));
   });
 });
