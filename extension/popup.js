@@ -20,6 +20,7 @@ const setStatus = (message, isError = false) => {
 
 fixButton?.addEventListener('click', () => {
   setStatus('Applying page fixes...');
+
   fixButton.disabled = true;
 
   chrome.runtime.sendMessage({ type: 'FIX_MARGIN' }, (response) => {

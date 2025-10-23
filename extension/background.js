@@ -174,6 +174,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             chatButtonsFound: chatButtonElements.length,
             chatButtonsRemoved
           };
+
         }
       });
 

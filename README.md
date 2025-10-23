@@ -2,6 +2,7 @@
 
 This repository contains a Chrome extension that zeroes out the `margin-left` style for every element on the current page that matches the selector `.ant-layout.css-133v4sd`, hides the sidebar `aside` element rendered as `ant-layout-sider`, removes the page header and footer, clears the top margin on the main layout content, and removes the floating chat button.
 
+
 ## How it works
 
 1. Click the extension icon to open the popup.
