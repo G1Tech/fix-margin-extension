@@ -1,13 +1,12 @@
 # Fix Margin Chrome Extension
 
-This repository contains a Chrome extension that zeroes out the `margin-left` style for every element on the current page that matches the selector `.ant-layout.css-133v4sd`, hides the sidebar `aside` element rendered as `ant-layout-sider`, removes the page header and footer, clears the top margin on the main layout content, and removes the floating chat button.
-
+This repository contains a Chrome extension that zeroes out the `margin-left` style for every element on the current page that matches the selector `.ant-layout.css-133v4sd`, hides the sidebar `aside` element rendered as `ant-layout-sider`, removes the page header with class `ant-layout-header style_header__IrB9Y style_light__FDgtT style_headerPad__E14Ne css-133v4sd` while leaving other headers intact, clears the top margin on the main layout content, and removes the floating chat button.
 
 ## How it works
 
 1. Click the extension icon to open the popup.
 2. Press **Apply page fixes**.
-3. The extension injects a script into the active tab that sets `margin-left: 0 !important` on all matching layout elements, applies `display: none !important` to matching sidebars, removes any `header` and `footer` blocks, sets `margin-top: 0 !important` on the `main.ant-layout-content.css-133v4sd` elements, and removes floating chat buttons (`div.style_chatButton__Gmdf9`). The popup reports how many elements were updated, including how many layout elements originally had a `262px` margin and how many main content blocks started at `64px`.
+3. The extension injects a script into the active tab that sets `margin-left: 0 !important` on all matching layout elements, applies `display: none !important` to matching sidebars, removes only the targeted header (`header.ant-layout-header.style_header__IrB9Y.style_light__FDgtT.style_headerPad__E14Ne.css-133v4sd`) along with any `footer` blocks, sets `margin-top: 0 !important` on the `main.ant-layout-content.css-133v4sd` elements, and removes floating chat buttons (`div.style_chatButton__Gmdf9`). The popup reports how many elements were updated, including how many layout elements originally had a `262px` margin and how many main content blocks started at `64px`.
 
 ## Loading the extension locally
 

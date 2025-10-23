@@ -80,7 +80,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           const sidebarElements = Array.from(document.querySelectorAll(sidebarSelector));
           const mainSelector = 'main.ant-layout-content.css-133v4sd';
           const mainElements = Array.from(document.querySelectorAll(mainSelector));
-          const headerElements = Array.from(document.querySelectorAll('header'));
+          const headerSelector =
+            'header.ant-layout-header.style_header__IrB9Y.style_light__FDgtT.style_headerPad__E14Ne.css-133v4sd';
+          const headerElements = Array.from(document.querySelectorAll(headerSelector));
           const footerElements = Array.from(document.querySelectorAll('footer'));
           const chatButtonSelector = 'div.style_chatButton__Gmdf9';
           const chatButtonElements = Array.from(document.querySelectorAll(chatButtonSelector));
@@ -174,7 +176,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             chatButtonsFound: chatButtonElements.length,
             chatButtonsRemoved
           };
-
         }
       });
 
